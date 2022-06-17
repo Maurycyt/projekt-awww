@@ -1,0 +1,120 @@
+main {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#trips, aside {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#trips {
+    min-width: 570px;
+    max-width: 570px;
+
+    margin-right: 20px;
+}
+
+aside {
+    min-width: 160px;
+    max-width: 160px;
+}
+
+#trips img {
+    width: 130px;
+    height: 100px;
+    object-fit: fill;
+}
+
+article.trip {
+    min-height: 120px;
+
+    margin: 20px 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+div.trip-description {
+    min-height: 120px;
+    width: 400px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+div.trip-price {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#advices, #promos {
+    display: flex;
+    flex-direction: column;
+}
+
+article.promo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+article.promo > * {
+    align-self: flex-end;
+    margin-bottom: 2px;
+}
+
+article.promo > h3 {
+    align-self: flex-start;
+}
+
+#advices > a:nth-child(even) {
+    background-color: rgba(0,0,0,0.1);
+}
+
+#advices > a:nth-child(even):hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+div.trip-price > a::after, #promos a::after {
+    content: ">>";
+}
+
+article.trip > a {
+    padding: 10px 20px;
+}
+
+@media screen and (max-width: 850px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #trips {
+        margin-right: 0;
+    }
+
+    #advices {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    #trips {
+        min-width: 300px;
+        max-width: 300px;
+    }
+
+    article.trip {
+        flex-direction: column;
+    }
+
+    div.trip-description {
+        width: 100%;
+    }  
+}

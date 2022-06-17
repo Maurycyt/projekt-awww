@@ -1,0 +1,30 @@
+extends template.pug
+block meta
+  title Wycieczka
+  link(rel='stylesheet' href='/css/trip.css')
+block content
+  - var id = trip.id, obrazek = trip.obrazek, obrazek_tekst = trip.obrazek_tekst, nazwa = trip.nazwa, opis = trip.opis;
+  section#trip_description
+    img(src=obrazek alt=obrazek_tekst)
+    h1 #{nazwa}
+    p #{opis}
+    h2 Nagłowek z tytułem
+    p
+      | Tu kolejny fragment tekstu. Może się z składać z kilku akapitów.
+    h2 Jeszcze jeden nagłówek
+    p
+      | I kolejne informacje o wycieczce. Trzeba się wysilić i wymyślić własne.
+    h2 Istotne informacje
+    ul
+      li termin wycieczki: kiedyś w przyszłości
+      li temperatury na miejscu: takie w sam raz
+      li warto zabrać: trochę ubrań na zmianę
+      li cena wycieczki to: #{cena}
+    h2 Program wycieczki
+    ol
+      li Odwiedziny na miejscu
+      li Obiad
+      li Wspólna wyprawa
+  section#links
+    a(href='main.html') Powrót
+    a(href='/book/'+id) Zarezerwuj

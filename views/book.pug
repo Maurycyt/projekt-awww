@@ -1,0 +1,64 @@
+extends template.pug
+
+block meta
+  title Rezerwacja
+  link(rel='stylesheet' href='/css/book.css')
+
+block content
+  - var id = trip.id, miejsca = trip.liczba_dostepnych_miejsc, obrazek = trip.obrazek, obrazek_tekst = trip.obrazek_tekst, nazwa = trip.nazwa, opis = trip.opis;
+  section#trip_informations
+    img(src=obrazek alt=obrazek_tekst)
+    a(href='/trip/' + id)
+      h1 Wspaniała wycieczka 
+      h2 Pozostało miejsc: #{miejsca}
+      if error_info 
+        p(class='error') #{error_info}
+      if info 
+        p#info(class='info') #{info}
+      if email_error
+        p(class='error') #{email_error}
+      if first_name_error 
+        p(class='error') #{first_name_error}
+      if last_name_error
+        p(class='error') #{last_name_error}
+      if n_people_error
+        p(class='error') #{n_people_error}
+    table#costs
+      thead
+        tr
+          th(scope='col') Nazwa
+          th(scope='col') Koszt
+      tbody
+        tr
+          td Ubezpieczenie
+          td 500 PLN
+        tr
+          td Bilety
+          td 1000 PLN
+        tr
+          td Wyżywienie
+          td 1000 PLN
+        tr
+          td Zakwaterowanie
+          td 1000 PLN
+        tr
+          td Razem od osoby
+          td 3000 PLN
+    h2 Formularz rezerwacyjny
+  section#form
+    form(method='post' action='/book/'+id)
+      input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40' required='')
+      input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40' required='')
+      input#phone(type='tel' placeholder='Nr telefonu' name='phone' pattern='[0-9]{9}' title='Numer powinien składać się z 9 cyfr.' required='')
+      input#email( placeholder='Adres e-mail' name='email')
+      input#n_people(type='number' placeholder='Liczba osób' name='n_people' required='' min='1' max='4')
+      label(for='gdpr_permission')
+        | Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z art. 6 ust. 1 lit. a) Rozporządzenia
+        | Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych
+        | w
+        | związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia
+        | dyrektywy 95/46/WE (ogólne rozporządzenie o ochronie danych), dalej: &bdquo;RODO&rdquo; 
+        br
+        |                      (... tutaj powinna być dalsza część wynikająca z przepisów prawa ...)
+      input#gdpr_permission(type='checkbox' name='gdpr_permission' required='')
+      button#submitid(type='submit') ZAREZERWUJ

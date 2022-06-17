@@ -1,0 +1,43 @@
+extends ./template.pug
+block meta
+  title Biuro podróży
+  link(rel='stylesheet' href='/css/main.css')
+block content
+  #trips
+    each trip, id in trips
+      - var pk = trip.id, image = trip.obrazek, image_alt = trip.obrazek_tekst, title = trip.nazwa, description = trip.opis, price = trip.cena;
+      article.trip
+        a(href='trip/'+pk)
+          img(src=image alt=image_alt)
+        .trip-description
+          a(href='trip/'+pk)
+            h1
+              | #{title}
+          span.description #{description}
+          .trip-price
+            span.price Cena: #{price}
+            a(href='book/'+pk) Zarezerwuj
+  aside
+    section#promos
+      h2 Promocje
+      article.promo
+        h3 Góry wysokie
+        span.trip-date 1-31 lutego
+        a(href='book/2') Rezerwuj
+      article.promo
+        h3 Inne miejsce
+        span.trip-date 17-18 kwietnia
+        a(href='book/1') Rezerwuj
+      article.promo
+        h3 Też gdzieś
+        span.trip-date w listopadzie
+        a(href='book/1') Rezerwuj
+      article.promo
+        h3 Warszawa
+        span.trip-date ciągle
+        a(href='book/1') Rezerwuj
+    section#advices
+      h2 Porady
+      a(href='') Co zabrać na wycieczkę?
+      a(href='') Kiedy najlepiej wyjechać?
+      a(href='') Jakie buty są najwygodniejsze?

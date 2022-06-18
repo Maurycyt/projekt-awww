@@ -14,19 +14,19 @@ async function takeScreenshot(driver, file) {
   await fsp.writeFile(file, image, "base64");
 }
 
-describe("Function", () => {
-  it("should output string equal to 'test'", () => {
-    equal(fun(), "test");
-  });
-});
+// describe("Function", () => {
+//   it("should output string equal to 'test'", () => {
+//     equal(fun(), "test");
+//   });
+// });
 
-describe("Async function", () => {
-  it("should output string equal to 'atest'", async () => {
-    const a = await asyncfun();
-    console.log(a);
-    equal(a, "atest");
-  });
-});
+// describe("Async function", () => {
+//   it("should output string equal to 'atest'", async () => {
+//     const a = await asyncfun();
+//     console.log(a);
+//     equal(a, "atest");
+//   });
+// });
 
 describe("Selenium test", () => {
   const driver = new Builder().withCapabilities(Capabilities.firefox()).build();

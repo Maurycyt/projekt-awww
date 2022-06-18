@@ -5,6 +5,8 @@ import {
   Capabilities,
   // eslint-disable-next-line node/no-unpublished-import
 } from "selenium-webdriver";
+// eslint-disable-next-line node/no-unpublished-import
+import { Options } from "selenium-webdriver/firefox.js";
 // import { fun, asyncfun } from "./example.mjs";
 
 /* global describe, it, after */
@@ -28,9 +30,14 @@ async function takeScreenshot(driver, file) {
 //   });
 // });
 
+const optionsHeadless = new Options().headless();
+
 describe("Selenium test", () => {
   console.log("Building driver...");
-  const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
+  const driver = new Builder()
+    .withCapabilities(Capabilities.firefox())
+    .setFirefoxOptions(optionsHeadless)
+    .build();
   console.log("Built driver.");
 
   it("should go to google.com and check title", async () => {

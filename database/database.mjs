@@ -52,7 +52,7 @@ export const get_db_memory = async () => {
     return await get_db(sequelize);
 }
 
-export const get_db_postgres = async () => {
+export const getDBPostgres = async () => {
     const sequelize = new Sequelize('postgres://postgres:pass123@localhost:5432/postgres');
     return await get_db(sequelize);
 }

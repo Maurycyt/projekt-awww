@@ -1,13 +1,14 @@
 import express, { static as _static } from "express";
-import _body_parser from "body-parser";
+import bodyParser from "body-parser";
 import { ValidationError } from "sequelize";
 import { check, validationResult } from "express-validator";
-import { get_db_postgres } from "./database/database.mjs";
-import { get_all_wycieczki, get_wycieczka } from "./database/queries.mjs";
+import session from "express-session";
+import { getDBPostgres } from "./database/database.mjs";
+import { getAllWycieczki, getWycieczka } from "./database/queries.mjs";
 
-const { urlencoded, json } = _body_parser;
+const { urlencoded, json } = bodyParser;
 
-export const app = express();
+const app = express();
 const port = 3000;
 
 app.set("view engine", "pug");
@@ -17,18 +18,26 @@ app.use(_static("public"));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
-get_db_postgres().then((db) => {
-  app.get("/", async (req, res, next) => {
-    const all = await get_all_wycieczki(db);
+app.use(
+  session({
+    secret: "2c6n3grf27863gaw98e7nrcfy3",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+getDBPostgres().then((db) => {
+  app.get("/", async (req, res) => {
+    const all = await getAllWycieczki(db);
     res.render("main", { trips: all });
   });
 
-  const with_wycieczka =
-    (init_transaction = false) =>
+  const withWycieczka =
+    (initTransaction = false) =>
     async (req, res, next) => {
       let t = null;
-      if (init_transaction) t = await db.sequelize.transaction();
-      const { wycieczka, zgloszenia } = await get_wycieczka(db, req.params.id, t);
+      if (initTransaction) t = await db.sequelize.transaction();
+      const { wycieczka } = await getWycieczka(db, req.params.id, t);
       if (!wycieczka) {
         next(new Error(`Nie można odnaleźć wycieczki z id: ${req.params.id}`));
       }
@@ -37,12 +46,11 @@ get_db_postgres().then((db) => {
       return next();
     };
 
-  app.get("/trip/:id(\\d+)", with_wycieczka(), async (req, res, next) => {
+  app.get("/trip/:id(\\d+)", withWycieczka(), async (req, res) => {
     res.render("trip", { trip: res.locals.trip });
   });
 
-  app.get("/book/:id(\\d+)", with_wycieczka(), async (req, res, next) => {
-    console.log('WIOOWIW');
+  app.get("/book/:id(\\d+)", withWycieczka(), async (req, res) => {
     res.render("book", { trip: res.locals.trip });
   });
 
@@ -66,14 +74,14 @@ get_db_postgres().then((db) => {
 
   app.post(
     "/book/:id(\\d+)",
-    with_wycieczka(true),
+    withWycieczka(true),
     check("email").isEmail().withMessage("Proszę wpisać poprawny email!"),
     check("first_name").notEmpty().withMessage("Imię nie może być puste!"),
     check("last_name").notEmpty().withMessage("Nazwisko nie może być puste!"),
     check("n_people")
       .isInt({ min: 0 })
       .withMessage("Liczba zgłoszeń musi być większa od 0!"),
-    async (req, res, next) => {
+    async (req, res) => {
       const { trip } = res.locals;
       const { t } = res.locals;
       const errors = validationResult(req);
@@ -122,22 +130,18 @@ get_db_postgres().then((db) => {
     }
   );
 
-  app.get(
-    "/book-success/:id(\\d+)",
-    with_wycieczka(),
-    async (req, res, next) => {
-      res.render("book", {
-        trip: res.locals.trip,
-        info: "Z powodzeniem zarezerwowano wycieczkę!",
-      });
-    }
-  );
+  app.get("/book-success/:id(\\d+)", withWycieczka(), async (req, res) => {
+    res.render("book", {
+      trip: res.locals.trip,
+      info: "Z powodzeniem zarezerwowano wycieczkę!",
+    });
+  });
 
   app.use((err, req, res) => {
     res.render("error", { error: err });
   });
 
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     res.render("error", { error: "Nie znaleziono strony o podanym adresie!" });
   });
 
@@ -145,3 +149,5 @@ get_db_postgres().then((db) => {
     console.log(`Example app listening on port ${port}`);
   });
 });
+
+export default app;

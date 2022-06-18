@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 
-export const get_all_wycieczki = async (db, t = null) =>
+export const getAllWycieczki = async (db, t = null) =>
   await db.Wycieczka.findAll({
     where: {
       data_poczatku: {
@@ -12,7 +12,7 @@ export const get_all_wycieczki = async (db, t = null) =>
     lock: true,
   });
 
-export const get_wycieczka = async (db, id, t = null) => ({
+export const getWycieczka = async (db, id, t = null) => ({
   wycieczka: await db.Wycieczka.findByPk(id, {
     transaction: t,
     lock: true,

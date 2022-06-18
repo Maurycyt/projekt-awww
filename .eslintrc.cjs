@@ -23,5 +23,5 @@ module.exports = {
     "no-prototype-builtins": "off",
     "import/extensions": [1, "ignorePackages"],
     "max-len": ["error", { code: 200 }],
-  }
+  },
 };

@@ -29,14 +29,25 @@ async function takeScreenshot(driver, file) {
 // });
 
 describe("Selenium test", () => {
+  console.log("Building driver...");
   const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
+  console.log("Built driver.");
 
   it("should go to google.com and check title", async () => {
+    console.log("Getting...");
     await driver.get("https://www.google.com");
+    console.log("Screenshotting...");
     await takeScreenshot(driver, "test.png");
+    console.log("Getting title...");
     const title = await driver.getTitle();
+    console.log("Comparing...");
     equal(title, "Google");
+    console.log("It finished.");
   });
 
-  after(() => driver.quit());
+  after(() => {
+    console.log("Quitting driver...");
+    driver.quit();
+    console.log("After finished.");
+  });
 });

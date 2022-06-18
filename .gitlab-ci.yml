@@ -2,6 +2,7 @@ image: node:latest
 
 test:
   script:
+    - apt install firefox
     - npm install
     - npm run lint
     - npm run test

@@ -5,7 +5,7 @@ import {
   Capabilities,
   // eslint-disable-next-line node/no-unpublished-import
 } from "selenium-webdriver";
-import { fun, asyncfun } from "./example.mjs";
+// import { fun, asyncfun } from "./example.mjs";
 
 /* global describe, it, after */
 

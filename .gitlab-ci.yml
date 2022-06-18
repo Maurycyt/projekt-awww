@@ -3,7 +3,7 @@ image: ubuntu
 test:
   script:
     - apt update
-    - apt install -y firefox npm
+    - apt install -y firefox npm xvfb
     - npm install
     - npm run lint
-    - npm run test
+    - xvfb-run npm run test

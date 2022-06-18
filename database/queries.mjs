@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 
 export const getAllWycieczki = async (db, t = null) =>
-  await db.Wycieczka.findAll({
+  db.Wycieczka.findAll({
     where: {
       data_poczatku: {
         [Op.gt]: new Date(Date.now()),

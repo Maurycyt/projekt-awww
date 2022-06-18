@@ -1,7 +1,13 @@
 import { promises as fsp } from "fs";
 import { equal } from "assert";
-import { Builder, Capabilities } from "selenium-webdriver";
+import {
+  Builder,
+  Capabilities,
+  // eslint-disable-next-line node/no-unpublished-import
+} from "selenium-webdriver";
 import { fun, asyncfun } from "./example.mjs";
+
+/* global describe, it, after */
 
 async function takeScreenshot(driver, file) {
   const image = await driver.takeScreenshot();
@@ -23,14 +29,7 @@ describe("Async function", () => {
 });
 
 describe("Selenium test", () => {
-  const TIMEOUT = 10000;
   const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
-
-  before(async () => {
-    await driver
-      .manage()
-      .setTimeouts({ implicit: TIMEOUT, pageLoad: TIMEOUT, script: TIMEOUT });
-  });
 
   it("should go to google.com and check title", async () => {
     await driver.get("https://www.google.com");

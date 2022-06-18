@@ -141,7 +141,8 @@ getDBPostgres().then((db) => {
     res.render("error", { error: err });
   });
 
-  app.use((err, req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, next) => {
     res.render("error", { error: "Nie znaleziono strony o podanym adresie!" });
   });
 

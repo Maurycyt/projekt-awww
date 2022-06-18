@@ -5,10 +5,11 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=11.14.0"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha --exit",
+    "test": "node ./node_modules/mocha/bin/mocha --exit --timeout 10000",
+    "lint": "npx eslint **/*.mjs",
     "start": "nodemon ./index.mjs",
     "init_db": "node ./database/init_db_sqlite.mjs"
   },

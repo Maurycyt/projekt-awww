@@ -1,9 +1,9 @@
 image: node:latest
 
 test:
+  services:
+    - selenium/standalone-firefox
   script:
-    - apt update
-    - apt install firefox
     - npm install
     - npm run lint
-    - npm run test
+    - npm run test --host=selenium__standalone-firefox

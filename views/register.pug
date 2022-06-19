@@ -1,0 +1,14 @@
+extends template.pug
+block meta
+	title Rejestracja
+	link(rel='stylesheet' href='/css/book.css')
+block content
+	form(method='post')
+		h1=message
+		input#name(type='text' placeholder='Name' name='name' maxlength='40' required='')
+		input#lastname(type='text' placeholder='Last name' name='lastname' maxlength='40' required='')
+		input#email(type='email' placeholder='E-mail' name='email' required='')
+		input#password(type='password' placeholder='Password' name='password' required='')
+		input#confirmpassword(type='password' placeholder='Confirm password' name='confirmpassword' required='')
+
+		button(type='submit') ZAREJESTRUJ

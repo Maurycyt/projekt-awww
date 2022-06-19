@@ -2,6 +2,7 @@ import express, { static as _static } from "express";
 import bodyParser from "body-parser";
 import { ValidationError } from "sequelize";
 import { check, validationResult } from "express-validator";
+import bcrypt from "bcrypt";
 import session from "express-session";
 import { getDBPostgres } from "./database/database.mjs";
 import { getAllWycieczki, getWycieczka } from "./database/queries.mjs";
@@ -135,6 +136,107 @@ getDBPostgres().then((db) => {
       trip: res.locals.trip,
       info: "Z powodzeniem zarezerwowano wycieczkę!",
     });
+  });
+
+  app.get("/register", (req, res) => {
+    res.render("register", { message: "" });
+  });
+
+  app.post(
+    "/register",
+    check("name").not().isEmpty(),
+    check("lastname").not().isEmpty(),
+    check("email").isEmail(),
+    check("password").not().isEmpty(),
+    check("confirmpassword").not().isEmpty(),
+    (req, res) => {
+      if (
+        !validationResult(req).isEmpty() ||
+        req.body.password !== req.body.confirmpassword
+      ) {
+        res.render("register", { message: "Incorrect data entered." });
+        return;
+      }
+      const hashedPassword = bcrypt.hashSync(req.body.password, 10);
+
+      const user = db.User.build({
+        name: req.body.name,
+        last_name: req.body.lastname,
+        email: req.body.email,
+        password: hashedPassword,
+      });
+
+      db.User.findOne({
+        where: {
+          email: user.email,
+        },
+      }).then((result) => {
+        if (result == null) {
+          user.save().then(() => {
+            req.session.loggedInEmail = req.body.email;
+            res.redirect("user");
+          });
+        } else {
+          res.render("register", {
+            message: "User with given email already exists.",
+          });
+        }
+      });
+    }
+  );
+
+  app.get("/login", (req, res) => {
+    if (req.session.loggedInEmail) {
+      res.redirect("user");
+    } else {
+      res.render("login", { message: "" });
+    }
+  });
+
+  app.post(
+    "/login",
+    // Validation not necessary
+    (req, res) => {
+      db.User.findOne({
+        where: {
+          email: req.body.email,
+        },
+      }).then((loginResult) => {
+        const comparePasswords =
+          loginResult != null &&
+          bcrypt.compareSync(
+            req.body.password,
+            loginResult.getDataValue("password")
+          );
+        if (comparePasswords) {
+          req.session.loggedInEmail = req.body.email;
+          res.redirect("user");
+        } else {
+          res.render("login", { message: "Login unsuccessful." });
+        }
+      });
+    }
+  );
+
+  app.get("/user", (req, res) => {
+    if (!req.session.loggedInEmail) {
+      res.redirect("login");
+    } else {
+      db.Reservation.findAll({
+        where: {
+          email: req.session.loggedInEmail,
+        },
+      }).then((reservations) => {
+        console.log(reservations);
+        res.render("user", { reservations, email: req.session.loggedInEmail });
+      });
+    }
+  });
+
+  app.get("/logout", (req, res) => {
+    console.log(`logging ${req.session.loggedInEmail} out`);
+    req.session.destroy();
+    res.redirect("/");
   });
 
   app.use((err, req, res) => {

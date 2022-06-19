@@ -1,0 +1,15 @@
+extends ./template.pug
+block meta
+  title Strona użytkownika
+  link(rel='stylesheet' href='/css/main.css')
+block account
+  a(href='/logout') Log out
+block content
+  #reservation
+    h1 Witaj, użytkowniku #{email}! Oto twoje rezerwacje:
+    each reservation in reservations
+      p ID: #{reservation.id}
+      p Name: #{reservation.name}
+      p Last name: #{reservation.last_name}
+      p Email: #{reservation.email}
+      p Number of seats: #{reservation.number_of_seats}

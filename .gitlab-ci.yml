@@ -1,9 +1,9 @@
-image: ubuntu
+image: ubuntu:latest
 
 test:
   script:
     - apt update
-    - apt install -y firefox npm xvfb
+    - apt install -y npm
     - npm install
     - npm run lint
-    - xvfb-run npm run test
+    - npm run test

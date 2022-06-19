@@ -4,6 +4,7 @@ test:
   script:
     - apt update
     - apt install -y npm
+    - apt install -y nodejs
     - npm install
     - npm run lint
     - npm run test

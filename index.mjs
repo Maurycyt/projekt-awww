@@ -4,8 +4,9 @@ import { ValidationError } from "sequelize";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import session from "express-session";
-import { getDBPostgres } from "./database/database.mjs";
+import { getDBFromEnvironmentVariable } from "./database/database.mjs";
 import { getAllWycieczki, getWycieczka } from "./database/queries.mjs";
+import initFunc from "./database/initDB.mjs";
 
 const { urlencoded, json } = bodyParser;
 
@@ -27,7 +28,9 @@ app.use(
   })
 );
 
-getDBPostgres().then((db) => {
+getDBFromEnvironmentVariable().then((db) => {
+  initFunc(db);
+
   app.get("/", async (req, res) => {
     const all = await getAllWycieczki(db);
     res.render("main", { trips: all });
@@ -102,10 +105,10 @@ getDBPostgres().then((db) => {
       try {
         const zgloszenie = await db.Zgloszenie.create(
           {
-            imie: req.body.first_name,
-            nazwisko: req.body.last_name,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
-            liczba_miejsc: req.body.n_people,
+            n_people: req.body.n_people,
           },
           { transaction: t }
         );
@@ -144,39 +147,50 @@ getDBPostgres().then((db) => {
 
   app.post(
     "/register",
-    check("name").not().isEmpty(),
-    check("lastname").not().isEmpty(),
-    check("email").isEmail(),
-    check("password").not().isEmpty(),
-    check("confirmpassword").not().isEmpty(),
+    check("first_name").not().isEmpty().withMessage("Imię nie może być puste!"),
+    check("last_name")
+      .not()
+      .isEmpty()
+      .withMessage("Nazwisko nie może być puste!"),
+    check("email").isEmail().withMessage("Proszę wpisać poprawny email!"),
+    check("password").not().isEmpty().withMessage("Proszę podać hasło."),
+    check("confirm_password")
+      .not()
+      .isEmpty()
+      .withMessage("Proszę podać hasło jeszcze raz."),
     (req, res) => {
       if (
         !validationResult(req).isEmpty() ||
-        req.body.password !== req.body.confirmpassword
+        req.body.password !== req.body.confirm_password
       ) {
-        res.render("register", { message: "Incorrect data entered." });
+        console.log(validationResult(req));
+        res.render("register", {
+          message: "Podano nieprawidłowe dane rejestracyjne.",
+        });
         return;
       }
       const hashedPassword = bcrypt.hashSync(req.body.password, 10);
 
-      const user = db.User.build({
-        name: req.body.name,
-        last_name: req.body.lastname,
+      const uzytkownik = db.Uzytkownik.build({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         email: req.body.email,
         password: hashedPassword,
       });
 
-      db.User.findOne({
+      db.Uzytkownik.findOne({
         where: {
-          email: user.email,
+          email: uzytkownik.email,
         },
       }).then((result) => {
         if (result == null) {
-          user.save().then(() => {
+          uzytkownik.save().then(() => {
             req.session.loggedInEmail = req.body.email;
+            console.log("Redirecting to user");
             res.redirect("user");
           });
         } else {
+          console.log("Rendering repeated email.");
           res.render("register", {
             message: "User with given email already exists.",
           });
@@ -197,7 +211,7 @@ getDBPostgres().then((db) => {
     "/login",
     // Validation not necessary
     (req, res) => {
-      db.User.findOne({
+      db.Uzytkownik.findOne({
         where: {
           email: req.body.email,
         },
@@ -222,13 +236,12 @@ getDBPostgres().then((db) => {
     if (!req.session.loggedInEmail) {
       res.redirect("login");
     } else {
-      db.Reservation.findAll({
+      db.Zgloszenie.findAll({
         where: {
           email: req.session.loggedInEmail,
         },
-      }).then((reservations) => {
-        console.log(reservations);
-        res.render("user", { reservations, email: req.session.loggedInEmail });
+      }).then((zgloszenia) => {
+        res.render("user", { zgloszenia, email: req.session.loggedInEmail });
       });
     }
   });
@@ -253,4 +266,4 @@ getDBPostgres().then((db) => {
   });
 });
 
-export default app;
+export { app, port };

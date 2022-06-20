@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import _wycieczka from "./wycieczka.mjs";
 import _zgloszenie from "./zgloszenie.mjs";
+import _uzytkownik from "./uzytkownik.mjs";
 
 // Połączenie z bazą danych
 // const sequelize = new Sequelize('postgres://mw429680:mw429680@localhost:5432/bd')
@@ -18,14 +19,10 @@ export const getDB = async (sequelize) => {
 
     db.sequelize = sequelize;
 
-    // Uzupełnij treść modułu wycieczka.mjs implementującego model Wycieczka
-
     db.Wycieczka = _wycieczka(sequelize, Sequelize, DataTypes);
-
-    // Uzupełnij treść modułu zgloszenie.mjs implementującego model Zgloszenie
     db.Zgloszenie = _zgloszenie(sequelize, Sequelize, DataTypes);
+    db.Uzytkownik = _uzytkownik(sequelize, Sequelize, DataTypes);
 
-    // Tu dodaj kod odpowiedzialny za utworzenie relacji pomiędzy modelami db.Wycieczka i db.Zgloszenie
     db.Wycieczka.hasMany(db.Zgloszenie);
     db.Zgloszenie.belongsTo(db.Wycieczka);
 
@@ -57,4 +54,13 @@ export const getDBPostgres = async () => {
     "postgres://mw429680:mw429680@localhost:5432/bd"
   );
   return getDB(sequelize);
+};
+
+export const getDBFromEnvironmentVariable = async () => {
+  if (process.env.TESTING_WYCIECZKI) {
+    console.log("Getting test DB.");
+    return getDBMemory();
+  }
+  console.log("Getting regular DB.");
+  return getDBPostgres();
 };

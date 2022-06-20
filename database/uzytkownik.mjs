@@ -1,7 +1,7 @@
 export default (conn, Sequelize, DataTypes) => {
   // odkomentuj i uzupełnij argumenty metody sequelize.define
 
-  const Zgloszenie = conn.define("Zgloszenie", {
+  const Uzytkownik = conn.define("Uzytkownik", {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -10,35 +10,21 @@ export default (conn, Sequelize, DataTypes) => {
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [2, 20],
-        isAlpha: true,
-      },
     },
     last_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [2, 20],
-        isAlpha: true,
-      },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
+      unique: true,
     },
-    n_people: {
-      type: DataTypes.INTEGER,
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        min: 0,
-      },
-      defaultValue: 0,
     },
   });
 
-  return Zgloszenie;
+  return Uzytkownik;
 };

@@ -77,5 +77,6 @@ export default (conn, Sequelize, DataTypes) => {
       },
     }
   );
+
   return Wycieczka;
 };

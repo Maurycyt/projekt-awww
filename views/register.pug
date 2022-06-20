@@ -5,10 +5,10 @@ block meta
 block content
 	form(method='post')
 		h1=message
-		input#name(type='text' placeholder='Name' name='name' maxlength='40' required='')
-		input#lastname(type='text' placeholder='Last name' name='lastname' maxlength='40' required='')
+		input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40' required='')
+		input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40' required='')
 		input#email(type='email' placeholder='E-mail' name='email' required='')
-		input#password(type='password' placeholder='Password' name='password' required='')
-		input#confirmpassword(type='password' placeholder='Confirm password' name='confirmpassword' required='')
+		input#password(type='password' placeholder='Hasło' name='password' required='')
+		input#confirm_password(type='password' placeholder='Powtórz hasło' name='confirm_password' required='')
 
 		button(type='submit') ZAREJESTRUJ

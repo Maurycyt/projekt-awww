@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 const initFunc = async (db) => {
   // Synchronizacja
   try {
@@ -43,21 +45,29 @@ const initFunc = async (db) => {
     });
 
     const zgloszenie1 = await db.Zgloszenie.create({
-      imie: "Anna",
-      nazwisko: "Kaliska",
+      first_name: "Anna",
+      last_name: "Kaliska",
       email: "anna.kaliska@wp.pl",
-      liczba_miejsc: 2,
+      n_people: 2,
     });
 
     const zgloszenie2 = await db.Zgloszenie.create({
-      imie: "Mateusz",
-      nazwisko: "Maniowski",
+      first_name: "Mateusz",
+      last_name: "Maniowski",
       email: "mateusz.maniowski@wp.pl",
-      liczba_miejsc: 3,
+      n_people: 3,
     });
 
     await miasto.addZgloszenie(zgloszenie1);
     await miasto.addZgloszenie(zgloszenie2);
+
+    // Admin
+    await db.Uzytkownik.create({
+      first_name: "Maurycy",
+      last_name: "Wojda",
+      email: "mw429680@students.mimuw.edu.pl",
+      password: bcrypt.hashSync("admin", 10),
+    });
   } catch (error) {
     console.log("An error occurred during data loading");
     console.log(error);

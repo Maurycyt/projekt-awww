@@ -3,7 +3,7 @@ import assert, { equal } from "assert";
 // eslint-disable-next-line node/no-unpublished-import
 import { Builder, Capabilities, By, until } from "selenium-webdriver";
 // eslint-disable-next-line node/no-unpublished-import
-// import { useFakeTimers } from "sinon";
+import { Options } from "selenium-webdriver/firefox.js";
 // eslint-disable-next-line node/no-unpublished-import
 import chai from "chai";
 // eslint-disable-next-line node/no-unpublished-import
@@ -18,6 +18,16 @@ import { app, port } from "../index.mjs";
 const should = chai.should();
 
 /* global describe, before, it, after */
+
+function getFirefoxDriver() {
+  const options = new Options();
+  options.headless();
+  const driver = new Builder()
+    .withCapabilities(Capabilities.firefox())
+    .setFirefoxOptions(options)
+    .build();
+  return driver;
+}
 
 async function takeScreenshot(driver, file) {
   const image = await driver.takeScreenshot();
@@ -39,14 +49,7 @@ describe("Async function", () => {
 });
 
 describe("Selenium test", () => {
-  const TIMEOUT = 10000;
-  const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
-
-  before(async () => {
-    await driver
-      .manage()
-      .setTimeouts({ implicit: TIMEOUT, pageLoad: TIMEOUT, script: TIMEOUT });
-  });
+  const driver = getFirefoxDriver();
 
   it("should go to google.com and check title", async () => {
     await driver.get("https://www.google.com");
@@ -103,14 +106,7 @@ describe("Task 2a", () => {
 // });
 
 describe("Task 3", () => {
-  const TIMEOUT = 10000;
-  const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
-
-  before(async () => {
-    await driver
-      .manage()
-      .setTimeouts({ implicit: TIMEOUT, pageLoad: TIMEOUT, script: TIMEOUT });
-  });
+  const driver = getFirefoxDriver();
 
   it("should go to localhost:port/error and find error text on the page", async () => {
     await takeScreenshot(driver, "test3_0.png");
@@ -129,14 +125,7 @@ describe("Task 3", () => {
 });
 
 describe("Task 4", () => {
-  const TIMEOUT = 10000;
-  const driver = new Builder().withCapabilities(Capabilities.firefox()).build();
-
-  before(async () => {
-    await driver
-      .manage()
-      .setTimeouts({ implicit: TIMEOUT, pageLoad: TIMEOUT, script: TIMEOUT });
-  });
+  const driver = getFirefoxDriver();
 
   it("should check if a properly filled out form redirects to the correct site", async () => {
     await driver.get(`localhost:${port}/book/1`);

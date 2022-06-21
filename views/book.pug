@@ -11,18 +11,6 @@ block content
     a(href='/trip/' + id)
       h1 Wspaniała wycieczka 
       h2 Pozostało miejsc: #{miejsca}
-      if error_info 
-        p(class='error') #{error_info}
-      if info 
-        p#info(class='info') #{info}
-      if email_error
-        p(class='error') #{email_error}
-      if first_name_error 
-        p(class='error') #{first_name_error}
-      if last_name_error
-        p(class='error') #{last_name_error}
-      if n_people_error
-        p(class='error') #{n_people_error}
     table#costs
       thead
         tr
@@ -44,14 +32,22 @@ block content
         tr
           td Razem od osoby
           td 3000 PLN
+    section#errors
+      p#info(class='info') #{info}
+      p#first_name_error(class='error') #{first_name_error}
+      p#last_name_error(class='error') #{last_name_error}
+      p#phone_error(class='error') #{phone_error}
+      p#email_error(class='error') #{email_error}
+      p#n_people_error(class='error') #{n_people_error}
+      p#gdpr_permission_error(class='error') #{gdpr_permission_error}
     h2 Formularz rezerwacyjny
   section#form
     form(method='post' action='/book/'+id)
-      input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40' required='')
-      input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40' required='')
-      input#phone(type='tel' placeholder='Nr telefonu' name='phone' pattern='[0-9]{9}' title='Numer powinien składać się z 9 cyfr.' required='')
+      input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40')
+      input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40')
+      input#phone(type='tel' placeholder='Nr telefonu' name='phone')
       input#email( placeholder='Adres e-mail' name='email')
-      input#n_people(type='number' placeholder='Liczba osób' name='n_people' required='' min='1' max='4')
+      input#n_people(type='number' placeholder='Liczba osób' name='n_people')
       label(for='gdpr_permission')
         | Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z art. 6 ust. 1 lit. a) Rozporządzenia
         | Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych
@@ -60,5 +56,7 @@ block content
         | dyrektywy 95/46/WE (ogólne rozporządzenie o ochronie danych), dalej: &bdquo;RODO&rdquo; 
         br
         |                      (... tutaj powinna być dalsza część wynikająca z przepisów prawa ...)
-      input#gdpr_permission(type='checkbox' name='gdpr_permission' required='')
+      input#gdpr_permission(type='checkbox' name='gdpr_permission')
       button#submitid(type='submit') ZAREZERWUJ
+  
+  script(type="module" src='/scripts/validateBook.mjs')

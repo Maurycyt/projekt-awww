@@ -8,10 +8,10 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "export TESTING_WYCIECZKI=true; node ./node_modules/mocha/bin/mocha --exit --timeout 10000; export TESTING_WYCIECZKI=",
+    "test": "export TESTING_WYCIECZKI=true && node ./node_modules/mocha/bin/mocha --exit --timeout 10000",
     "lint": "npx eslint **/*.mjs",
-    "start": "nodemon ./index.mjs",
-    "init_db": "node ./database/init_db_sqlite.mjs"
+    "start": "export TESTING_WYCIECZKI= && nodemon ./index.mjs",
+    "initDB": "node ./database/initDBSqlite.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -43,6 +43,7 @@
     "pg-hstore": "^2.3.4",
     "pug": "^3.0.2",
     "sequelize": "^6.19.0",
-    "sqlite3": "^5.0.8"
+    "sqlite3": "^5.0.8",
+    "validator": "^13.7.0"
   }
 }

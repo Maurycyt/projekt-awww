@@ -1,9 +1,10 @@
 import express, { static as _static } from "express";
 import bodyParser from "body-parser";
 import { ValidationError } from "sequelize";
-import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import session from "express-session";
+import { check, validationResult } from "express-validator";
+import { checkEmail } from "./public/scripts/validations.mjs";
 import { getDBFromEnvironmentVariable } from "./database/database.mjs";
 import { getAllWycieczki, getWycieczka } from "./database/queries.mjs";
 import initFunc from "./database/initDB.mjs";
@@ -28,7 +29,7 @@ app.use(
   })
 );
 
-getDBFromEnvironmentVariable().then((db) => {
+const database = await getDBFromEnvironmentVariable().then((db) => {
   initFunc(db);
 
   app.get("/", async (req, res) => {
@@ -79,12 +80,22 @@ getDBFromEnvironmentVariable().then((db) => {
   app.post(
     "/book/:id(\\d+)",
     withWycieczka(true),
-    check("email").isEmail().withMessage("Proszę wpisać poprawny email!"),
-    check("first_name").notEmpty().withMessage("Imię nie może być puste!"),
-    check("last_name").notEmpty().withMessage("Nazwisko nie może być puste!"),
+    check("email")
+      .custom((value) => {
+        if (!checkEmail(value)) {
+          throw new Error("Email invalid.");
+        }
+        return true;
+      })
+      .withMessage("Proszę wpisać poprawny email."),
+    check("first_name").notEmpty().withMessage("Imię nie może być puste."),
+    check("last_name").notEmpty().withMessage("Nazwisko nie może być puste."),
     check("n_people")
       .isInt({ min: 0 })
-      .withMessage("Liczba zgłoszeń musi być większa od 0!"),
+      .withMessage("Liczba zgłoszeń musi być większa od 0."),
+    check("gdpr_permission")
+      .equals("on")
+      .withMessage("Nie udzielono zgody RODO."),
     async (req, res) => {
       const { trip } = res.locals;
       const { t } = res.locals;
@@ -147,26 +158,38 @@ getDBFromEnvironmentVariable().then((db) => {
 
   app.post(
     "/register",
-    check("first_name").not().isEmpty().withMessage("Imię nie może być puste!"),
+    check("first_name").not().isEmpty().withMessage("Imię nie może być puste."),
     check("last_name")
       .not()
       .isEmpty()
-      .withMessage("Nazwisko nie może być puste!"),
-    check("email").isEmail().withMessage("Proszę wpisać poprawny email!"),
+      .withMessage("Nazwisko nie może być puste."),
+    check("email")
+      .custom((value) => {
+        if (!checkEmail(value)) {
+          throw new Error("Email invalid.");
+        }
+        return true;
+      })
+      .withMessage("Proszę wpisać poprawny email."),
     check("password").not().isEmpty().withMessage("Proszę podać hasło."),
     check("confirm_password")
       .not()
       .isEmpty()
-      .withMessage("Proszę podać hasło jeszcze raz."),
+      .withMessage("Powtórzone hasło musi być równe hasłu."),
     (req, res) => {
-      if (
-        !validationResult(req).isEmpty() ||
-        req.body.password !== req.body.confirm_password
-      ) {
-        console.log(validationResult(req));
-        res.render("register", {
-          message: "Podano nieprawidłowe dane rejestracyjne.",
+      const validationErrors = validationResult(req);
+      console.log("Errors so far:", validationErrors);
+      if (req.body.password !== req.body.confirm_password) {
+        validationErrors.errors.push({
+          value: req.body.confirm_password,
+          msg: "Powtórzone hasło musi być równe hasłu.",
+          param: "confirm_password",
+          location: "body",
         });
+        console.log("Here!", validationErrors);
+      }
+      if (!validationErrors.isEmpty()) {
+        res.render("register", { ...parseErrors(validationErrors.mapped()) });
         return;
       }
       const hashedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -186,13 +209,11 @@ getDBFromEnvironmentVariable().then((db) => {
         if (result == null) {
           uzytkownik.save().then(() => {
             req.session.loggedInEmail = req.body.email;
-            console.log("Redirecting to user");
             res.redirect("user");
           });
         } else {
-          console.log("Rendering repeated email.");
           res.render("register", {
-            message: "User with given email already exists.",
+            user_exists_error: "User with given email already exists.",
           });
         }
       });
@@ -264,6 +285,8 @@ getDBFromEnvironmentVariable().then((db) => {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
+
+  return db;
 });
 
-export { app, port };
+export { app, port, database };

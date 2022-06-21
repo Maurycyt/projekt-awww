@@ -170,7 +170,7 @@ describe("Task 5", () => {
         phone: "600822321",
         email: "mw429680@students.mimuw.edu.pl",
         n_people: "2", // <-- nie powinno przechodzić z n_people = 0
-        gdpr_permission: "on", // <-- bez tego również przechodz. Błąd w walidacji.
+        gdpr_permission: "on", // <-- bez tego również przechodzi. Błąd w walidacji.
       })
       .end((err, res) => {
         should.equal(err, null);

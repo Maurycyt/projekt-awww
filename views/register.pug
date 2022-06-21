@@ -3,12 +3,18 @@ block meta
 	title Rejestracja
 	link(rel='stylesheet' href='/css/book.css')
 block content
+	p#info(class='info') #{info} 
+	p#first_name_error(class='error') #{first_name_error}
+	p#last_name_error(class='error') #{last_name_error}
+	p#email_error(class='error') #{email_error}
+	p#password_error(class='error') #{password_error}
+	p#confirm_password_error(class='error') #{confirm_password_error}
+	p#user_extsts_error(class='error') #{user_exists_error}
 	form(method='post')
-		h1=message
-		input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40' required='')
-		input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40' required='')
-		input#email(type='email' placeholder='E-mail' name='email' required='')
-		input#password(type='password' placeholder='Hasło' name='password' required='')
-		input#confirm_password(type='password' placeholder='Powtórz hasło' name='confirm_password' required='')
+		input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40')
+		input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40')
+		input#email(type='email' placeholder='E-mail' name='email')
+		input#password(type='password' placeholder='Hasło' name='password')
+		input#confirm_password(type='password' placeholder='Powtórz hasło' name='confirm_password')
 
 		button(type='submit') ZAREJESTRUJ

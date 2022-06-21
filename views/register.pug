@@ -3,18 +3,22 @@ block meta
 	title Rejestracja
 	link(rel='stylesheet' href='/css/book.css')
 block content
-	p#info(class='info') #{info} 
-	p#first_name_error(class='error') #{first_name_error}
-	p#last_name_error(class='error') #{last_name_error}
-	p#email_error(class='error') #{email_error}
-	p#password_error(class='error') #{password_error}
-	p#confirm_password_error(class='error') #{confirm_password_error}
-	p#user_extsts_error(class='error') #{user_exists_error}
-	form(method='post')
-		input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40')
-		input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40')
-		input#email(type='email' placeholder='E-mail' name='email')
-		input#password(type='password' placeholder='Hasło' name='password')
-		input#confirm_password(type='password' placeholder='Powtórz hasło' name='confirm_password')
+	section#errors
+		p#info(class='info') #{info}
+		p#first_name_error(class='error') #{first_name_error}
+		p#last_name_error(class='error') #{last_name_error}
+		p#email_error(class='error') #{email_error}
+		p#password_error(class='error') #{password_error}
+		p#confirm_password_error(class='error') #{confirm_password_error}
+		p#user_extsts_error(class='error') #{user_exists_error}
+	section#form
+		form(method='post' action='user')
+			input#first_name(type='text' placeholder='Imię' name='first_name')
+			input#last_name(type='text' placeholder='Nazwisko' name='last_name')
+			input#email(placeholder='Adres e-mail' name='email')
+			input#password(type='password' placeholder='Hasło' name='password')
+			input#confirm_password(type='password' placeholder='Powtórz hasło' name='confirm_password')
 
-		button(type='submit') ZAREJESTRUJ
+			button(type='submit') ZAREJESTRUJ
+	
+	script(type="module" src='/scripts/validateRegister.mjs')

@@ -3,11 +3,18 @@ import * as validations from "./validations.mjs";
 
 document.getElementById("form").addEventListener("submit", (ev) => {
   let noErrors = true;
+  console.log("------------------");
+  console.log(`noErrors: ${noErrors}`);
   noErrors &= validations.validateFirstName();
+  console.log(`noErrors: ${noErrors}`);
   noErrors &= validations.validateLastName();
+  console.log(`noErrors: ${noErrors}`);
   noErrors &= validations.validateEmail();
+  console.log(`noErrors: ${noErrors}`);
   noErrors &= validations.validatePassword();
+  console.log(`noErrors: ${noErrors}`);
   noErrors &= validations.validateConfirmPassword();
+  console.log(`noErrors: ${noErrors}`);
   if (!noErrors) {
     ev.preventDefault();
   }

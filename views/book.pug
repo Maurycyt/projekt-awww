@@ -32,21 +32,21 @@ block content
         tr
           td Razem od osoby
           td 3000 PLN
-    section#errors
-      p#info(class='info') #{info}
-      p#first_name_error(class='error') #{first_name_error}
-      p#last_name_error(class='error') #{last_name_error}
-      p#phone_error(class='error') #{phone_error}
-      p#email_error(class='error') #{email_error}
-      p#n_people_error(class='error') #{n_people_error}
-      p#gdpr_permission_error(class='error') #{gdpr_permission_error}
-    h2 Formularz rezerwacyjny
+  section#errors
+    p#info(class='info') #{info}
+    p#first_name_error(class='error') #{first_name_error}
+    p#last_name_error(class='error') #{last_name_error}
+    p#phone_error(class='error') #{phone_error}
+    p#email_error(class='error') #{email_error}
+    p#n_people_error(class='error') #{n_people_error}
+    p#gdpr_permission_error(class='error') #{gdpr_permission_error}
   section#form
+    h2 Formularz rezerwacyjny
     form(method='post' action='/book/'+id)
       input#first_name(type='text' placeholder='Imię' name='first_name' maxlength='40')
       input#last_name(type='text' placeholder='Nazwisko' name='last_name' maxlength='40')
       input#phone(type='tel' placeholder='Nr telefonu' name='phone')
-      input#email( placeholder='Adres e-mail' name='email')
+      input#email(placeholder='Adres e-mail' name='email')
       input#n_people(type='number' placeholder='Liczba osób' name='n_people')
       label(for='gdpr_permission')
         | Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z art. 6 ust. 1 lit. a) Rozporządzenia

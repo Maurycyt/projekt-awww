@@ -41,7 +41,7 @@ const validatePhone = () => {
 const validateEmail = () => {
   if (!checkEmail(document.getElementById("email").value)) {
     document.getElementById("email_error").innerHTML =
-      "Proszę wpisać poprawny email.";
+      "Proszę wpisać poprawny e-mail.";
     return false;
   }
   document.getElementById("email_error").innerHTML = "";
@@ -61,11 +61,11 @@ const validateConfirmPassword = () => {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirm_password").value;
   if (password !== confirmPassword) {
-    document.getElementById("email_error").innerHTML =
+    document.getElementById("confirm_password_error").innerHTML =
       "Powtórzone hasło musi być równe hasłu.";
     return false;
   }
-  document.getElementById("email_error").innerHTML = "";
+  document.getElementById("confirm_password_error").innerHTML = "";
   return true;
 };
 

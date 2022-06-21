@@ -230,8 +230,14 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
 
   app.post(
     "/login",
-    // Validation not necessary
+    check("email").notEmpty().withMessage("Proszę wpisać poprawny email."),
+    check("password").notEmpty().withMessage("Proszę podać hasło."),
     (req, res) => {
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) {
+        res.render("login", { ...parseErrors(validationErrors.mapped()) });
+        return;
+      }
       db.Uzytkownik.findOne({
         where: {
           email: req.body.email,

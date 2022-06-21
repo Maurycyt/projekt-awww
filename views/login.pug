@@ -3,11 +3,17 @@ block meta
 	title Logowanie
 	link(rel='stylesheet' href='/css/book.css')
 block content
-	form(method='post')
-		input#email(type='email' placeholder='E-mail' name='email' required='')
-		input#password(type='password' placeholder='Hasło' name='password' required='')
+	section#errors
+		p#email_error(class='error') #{email_error}
+		p#password_error(class='error') #{password_error}
+	section#form
+		form(method='post')
+			input#email(placeholder='E-mail' name='email')
+			input#password(type='password' placeholder='Hasło' name='password')
 
-		button(type='submit') ZALOGUJ
+			button(type='submit') ZALOGUJ
 	p
 	a(href='register')
 		button NIE POSIADASZ KONTA? ZAREJESTRUJ SIĘ!
+
+	script(type="module" src='/scripts/validateLogin.mjs')

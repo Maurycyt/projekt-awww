@@ -38,7 +38,7 @@ const describeTestTest = () =>
 
     it("should check if the selenium webdriver works properly", async () => {
       await driver.get("https://www.google.com");
-      await takeScreenshot(driver, "test.png");
+      await takeScreenshot(driver, "testScreenshots/google.png");
       const title = await driver.getTitle();
       equal(title, "Google");
     });

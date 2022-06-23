@@ -1,69 +1,10 @@
-import assert from "assert";
-// eslint-disable-next-line node/no-unpublished-import
-import { By, until } from "selenium-webdriver";
-// eslint-disable-next-line node/no-unpublished-import
-import chai from "chai";
-// eslint-disable-next-line node/no-unpublished-import
-import chaiHttp from "chai-http";
-// eslint-disable-next-line node/no-unpublished-import
-import { useFakeTimers } from "sinon";
-import { getDBMemory } from "../database/database.mjs";
-import initFunc from "../database/initDB.mjs";
-import { getWycieczka, getAllWycieczki } from "../database/queries.mjs";
-
-import { app, port } from "../index.mjs";
-
-/* global describe, before, it, after */
-
 import testTest from "./testTest.mjs";
 import databaseTest from "./databaseTest.mjs";
-
-const should = chai.should();
+import notFoundTest from "./notFoundTest.mjs";
 
 testTest();
 databaseTest();
-
-/* describe("Task 2a", () => {
-  let db;
-
-  before(async () => {
-    db = await getDBMemory();
-    await initFunc(db);
-  });
-
-  it("should test basic database functionality", async () => {
-    // Checking information fetching for trip with pk=1.
-    const getWycieczkaResult = await getWycieczka(db, 1);
-    assert(getWycieczkaResult.wycieczka.dataValues.id === 1);
-    // Checking information fetching for date = Date.now().
-    const getAllWycieczkiResult = await getAllWycieczki(db);
-    assert(getAllWycieczkiResult.length === 2);
-  });
-});
-
-describe("Task 2b", () => {
-  let db;
-
-  before(async () => {
-    db = await getDBMemory();
-    await initFunc(db);
-    // (*) Checking future test behaviour.
-    const futureDate = new Date();
-    futureDate.setFullYear(2024);
-    useFakeTimers({
-      now: futureDate,
-    });
-  });
-
-  it("should test basic database functionality but with a different date.", async () => {
-    // Checking information fetching for trip with pk=1.
-    const getWycieczkaResult = await getWycieczka(db, 1);
-    assert.ok(getWycieczkaResult.wycieczka.dataValues.id === 1);
-    // Checking information fetching for date = Date.now().
-    const getAllWycieczkiResult = await getAllWycieczki(db);
-    assert(getAllWycieczkiResult.length === 1);
-  });
-}); */
+notFoundTest();
 
 /* describe("Task 3", () => {
   const driver = getFirefoxDriver();

@@ -4,7 +4,7 @@
 import { promises } from "fs";
 import path from "path";
 // eslint-disable-next-line node/no-unpublished-import
-import { Builder, Capabilities, By } from "selenium-webdriver";
+import { Builder, Capabilities, By, until } from "selenium-webdriver";
 // eslint-disable-next-line node/no-unpublished-import
 import { Options } from "selenium-webdriver/firefox.js";
 // eslint-disable-next-line node/no-unpublished-import
@@ -12,9 +12,10 @@ import chai from "chai";
 // eslint-disable-next-line node/no-unpublished-import
 import chaiHttp from "chai-http";
 
-const getFirefoxDriver = () => {
+const getFirefoxDriver = (width = 2560, height = 1920) => {
   const options = new Options();
   options.headless();
+  options.addArguments(`--width=${width}`, `--height=${height}`);
   const driver = new Builder()
     .withCapabilities(Capabilities.firefox())
     .setFirefoxOptions(options)
@@ -49,26 +50,33 @@ const sendFormSelenium = async (
     }
   }
 
-  takeScreenshot(driver, `testScreenshots/${screenshotPrefix}BeforeSubmit.png`);
+  await takeScreenshot(
+    driver,
+    `testScreenshots/${screenshotPrefix}BeforeSubmit.png`
+  );
 
   await driver.findElement(By.id("submitid")).click();
 
-  takeScreenshot(driver, `testScreenshots/${screenshotPrefix}AfterSubmit.png`);
+  await takeScreenshot(
+    driver,
+    `testScreenshots/${screenshotPrefix}AfterSubmit.png`
+  );
 
   for (const value of expectedContents) {
-    await driver.findElement(By.xpath(`//p[text()='${value}']`));
+    await driver.wait(until.elementLocated(By.xpath(`//p[text()='${value}']`)));
   }
 };
+
+chai.use(chaiHttp);
+const should = chai.should();
 
 /**
  * Takes the app and the url to send the request to.
  * Takes a form input object and inputs the values into elements with the ids given by the keys.
  * If a value is empty, then treats it like a click.
- * Finally, executes the verifier on the err and res.
+ * Finally, checks if all of the expected contents are present on the site.
  */
-const sendFormChai = async (app, url, formInput, verifier) => {
-  chai.use(chaiHttp);
-
+const sendFormChai = (app, url, formInput, expectedContents) => {
   const formInputCopy = formInput;
   for (const [key, value] of Object.entries(formInputCopy)) {
     if (!value) {
@@ -76,7 +84,19 @@ const sendFormChai = async (app, url, formInput, verifier) => {
     }
   }
 
-  await chai.request(app).post(url).send(formInputCopy).end(verifier);
+  chai
+    .request(app)
+    .post(url)
+    .type("form")
+    .send(formInputCopy)
+    .end((err, res) => {
+      should.equal(err, null);
+      res.should.have.status(200);
+      should.not.equal(res.text, null);
+      for (const value of expectedContents) {
+        res.text.should.contain(value);
+      }
+    });
 };
 
 export { getFirefoxDriver, takeScreenshot, sendFormSelenium, sendFormChai };

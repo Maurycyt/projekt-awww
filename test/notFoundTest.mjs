@@ -1,6 +1,5 @@
-import assert from "assert";
 // eslint-disable-next-line node/no-unpublished-import
-import { By } from "selenium-webdriver";
+import { By, until } from "selenium-webdriver";
 // eslint-disable-next-line node/no-unpublished-import
 import chai from "chai";
 // eslint-disable-next-line node/no-unpublished-import
@@ -23,14 +22,15 @@ const describeNotFoundTest = () =>
 
     it("should check if the proper message is displayed when request is sent to invalid url with selenium", async () => {
       await driver.get(`localhost:${port}/someInvalidURL`);
-      const element = await driver.findElement(
-        By.xpath("//p[text()='Nie znaleziono strony o podanym adresie!']")
+      await driver.wait(
+        until.elementLocated(
+          By.xpath("//p[text()='Nie znaleziono strony o podanym adresie!']")
+        )
       );
-      await takeScreenshot(driver, "testScreenshots/test3_2.png");
-      assert(element != null);
+      await takeScreenshot(driver, "testScreenshots/notFound.png");
     });
 
-    it("should check if the proper message is displayed when request is sent to invalid url with chai", async () => {
+    it("should check if the proper message is displayed when request is sent to invalid url with chai", () => {
       chai
         .request(app)
         .get("/someInvalidURL")

@@ -8,7 +8,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "export TESTING_WYCIECZKI=true && node ./node_modules/mocha/bin/mocha --exit --timeout 10000",
+    "test": "rm -rf ./testScreenshots/ && export TESTING_WYCIECZKI=true && node ./node_modules/mocha/bin/mocha --exit --timeout 10000",
     "lint": "npx eslint **/*.mjs",
     "start": "export TESTING_WYCIECZKI= && nodemon ./index.mjs",
     "initDB": "node ./database/initDBSqlite.mjs"

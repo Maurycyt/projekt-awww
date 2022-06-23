@@ -1,31 +1,14 @@
 import testTest from "./testTest.mjs";
 import databaseTest from "./databaseTest.mjs";
 import notFoundTest from "./notFoundTest.mjs";
+import bookingValidationTest from "./bookingValidationTest.mjs";
 
 testTest();
 databaseTest();
 notFoundTest();
+bookingValidationTest();
 
-/* describe("Task 3", () => {
-  const driver = getFirefoxDriver();
-
-  it("should go to localhost:port/error and find error text on the page", async () => {
-    await takeScreenshot(driver, "test3_0.png");
-    await driver.get(`localhost:${port}/error`);
-    await takeScreenshot(driver, "test3_1.png");
-    const element = await driver.findElement(
-      By.xpath("//p[text()='Nie znaleziono strony o podanym adresie!']")
-    );
-    await takeScreenshot(driver, "test3_2.png");
-    assert(element != null);
-  });
-
-  after(() => {
-    driver.quit();
-  });
-});
-
-describe("Task 4", () => {
+/* describe("Task 4", () => {
   const driver = getFirefoxDriver();
 
   it("should check if a properly filled out form redirects to the correct site", async () => {

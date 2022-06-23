@@ -1,68 +1,30 @@
-import { promises as fsp } from "fs";
-import assert, { equal } from "assert";
+import assert from "assert";
 // eslint-disable-next-line node/no-unpublished-import
-import { Builder, Capabilities, By, until } from "selenium-webdriver";
-// eslint-disable-next-line node/no-unpublished-import
-import { Options } from "selenium-webdriver/firefox.js";
+import { By, until } from "selenium-webdriver";
 // eslint-disable-next-line node/no-unpublished-import
 import chai from "chai";
 // eslint-disable-next-line node/no-unpublished-import
 import chaiHttp from "chai-http";
-import { fun, asyncfun } from "./example.mjs";
+// eslint-disable-next-line node/no-unpublished-import
+import { useFakeTimers } from "sinon";
 import { getDBMemory } from "../database/database.mjs";
 import initFunc from "../database/initDB.mjs";
 import { getWycieczka, getAllWycieczki } from "../database/queries.mjs";
 
 import { app, port } from "../index.mjs";
 
-const should = chai.should();
-
 /* global describe, before, it, after */
 
-function getFirefoxDriver() {
-  const options = new Options();
-  options.headless();
-  const driver = new Builder()
-    .withCapabilities(Capabilities.firefox())
-    .setFirefoxOptions(options)
-    .build();
-  return driver;
-}
+import testTest from "./testTest.mjs";
+import databaseTest from "./databaseTest.mjs";
 
-async function takeScreenshot(driver, file) {
-  const image = await driver.takeScreenshot();
-  await fsp.writeFile(file, image, "base64");
-}
+const should = chai.should();
 
-describe("Function", () => {
-  it("should output string equal to 'test'", () => {
-    equal(fun(), "test");
-  });
-});
+testTest();
+databaseTest();
 
-describe("Async function", () => {
-  it("should output string equal to 'atest'", async () => {
-    const a = await asyncfun();
-    console.log(a);
-    equal(a, "atest");
-  });
-});
-
-describe("Selenium test", () => {
-  const driver = getFirefoxDriver();
-
-  it("should go to google.com and check title", async () => {
-    await driver.get("https://www.google.com");
-    await takeScreenshot(driver, "test.png");
-    const title = await driver.getTitle();
-    equal(title, "Google");
-  });
-
-  after(() => driver.quit());
-});
-
-describe("Task 2a", () => {
-  let db = null;
+/* describe("Task 2a", () => {
+  let db;
 
   before(async () => {
     db = await getDBMemory();
@@ -79,33 +41,31 @@ describe("Task 2a", () => {
   });
 });
 
-// describe("Task 2b", () => {
-//   let db = null;
+describe("Task 2b", () => {
+  let db;
 
-//   before(async () => {
-//     db = await getDBMemory();
-//     await initFunc(db);
-//     // (*) Checking future test behaviour.
-//     useFakeTimers({
-//       now: new Date({
-//         year: 2030,
-//       }),
-//     });
-//   });
+  before(async () => {
+    db = await getDBMemory();
+    await initFunc(db);
+    // (*) Checking future test behaviour.
+    const futureDate = new Date();
+    futureDate.setFullYear(2024);
+    useFakeTimers({
+      now: futureDate,
+    });
+  });
 
-//   it("should test basic database functionality but with a different date.", async () => {
-//     // Checking information fetching for trip with pk=1.
-//     const getWycieczkaResult = await getWycieczka(db, 1);
-//     console.log(`\t\t>>>\t${getWycieczkaResult.wycieczka.dataValues.id}`);
-//     assert.ok(getWycieczkaResult.wycieczka.dataValues.id === 1);
-//     // Checking information fetching for date = Date.now().
-//     const getAllWycieczkiResult = await getAllWycieczki(db);
-//     console.log(`\t\t>>>\t${getAllWycieczkiResult.length}`);
-//     assert(getAllWycieczkiResult.length === 3);
-//   });
-// });
+  it("should test basic database functionality but with a different date.", async () => {
+    // Checking information fetching for trip with pk=1.
+    const getWycieczkaResult = await getWycieczka(db, 1);
+    assert.ok(getWycieczkaResult.wycieczka.dataValues.id === 1);
+    // Checking information fetching for date = Date.now().
+    const getAllWycieczkiResult = await getAllWycieczki(db);
+    assert(getAllWycieczkiResult.length === 1);
+  });
+}); */
 
-describe("Task 3", () => {
+/* describe("Task 3", () => {
   const driver = getFirefoxDriver();
 
   it("should go to localhost:port/error and find error text on the page", async () => {
@@ -180,4 +140,4 @@ describe("Task 5", () => {
         done();
       });
   });
-});
+}); */

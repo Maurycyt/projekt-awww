@@ -12,7 +12,7 @@ import initFunc from "./database/initDB.mjs";
 const { urlencoded, json } = bodyParser;
 
 const app = express();
-const port = 3000;
+const port = parseInt(process.env.WYCIECZKI_PORT, 10);
 
 app.set("view engine", "pug");
 app.set("views", "./views");
@@ -235,7 +235,14 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
 
   app.post(
     "/login",
-    check("email").notEmpty().withMessage("Proszę wpisać poprawny email."),
+    check("email")
+      .custom((value) => {
+        if (!checkEmail(value)) {
+          throw new Error("Email invalid");
+        }
+        return true;
+      })
+      .withMessage("Proszę podać poprawny e-mail."),
     check("password").notEmpty().withMessage("Proszę podać hasło."),
     (req, res) => {
       const validationErrors = validationResult(req);
@@ -258,7 +265,7 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
           req.session.loggedInEmail = req.body.email;
           res.redirect("user");
         } else {
-          res.render("login", { message: "Login unsuccessful." });
+          res.render("login", { error: "Nie udało się zalogować." });
         }
       });
     }

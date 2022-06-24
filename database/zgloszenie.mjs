@@ -11,7 +11,6 @@ export default (conn, Sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [2, 20],
         isAlpha: true,
       },
     },
@@ -19,7 +18,6 @@ export default (conn, Sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [2, 20],
         isAlpha: true,
       },
     },

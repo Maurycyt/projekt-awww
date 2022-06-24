@@ -4,6 +4,7 @@ block meta
 	link(rel='stylesheet' href='/css/book.css')
 block content
 	section#errors
+		p#error(class='error') #{error}
 		p#email_error(class='error') #{email_error}
 		p#password_error(class='error') #{password_error}
 	section#form

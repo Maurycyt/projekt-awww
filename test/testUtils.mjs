@@ -76,7 +76,13 @@ const should = chai.should();
  * If a value is empty, then treats it like a click.
  * Finally, checks if all of the expected contents are present on the site.
  */
-const sendFormChai = (app, url, formInput, expectedContents) => {
+const sendFormChai = (
+  app,
+  url,
+  formInput,
+  expectedContents,
+  chaiResDebug = false
+) => {
   const formInputCopy = formInput;
   for (const [key, value] of Object.entries(formInputCopy)) {
     if (!value) {
@@ -90,6 +96,9 @@ const sendFormChai = (app, url, formInput, expectedContents) => {
     .type("form")
     .send(formInputCopy)
     .end((err, res) => {
+      if (chaiResDebug) {
+        console.log(res);
+      }
       should.equal(err, null);
       res.should.have.status(200);
       should.not.equal(res.text, null);
@@ -99,4 +108,23 @@ const sendFormChai = (app, url, formInput, expectedContents) => {
     });
 };
 
-export { getFirefoxDriver, takeScreenshot, sendFormSelenium, sendFormChai };
+const sendForm = async (
+  driver,
+  screenshotPrefix,
+  app,
+  url,
+  formInput,
+  expectedContents,
+  chaiResDebug = false
+) => {
+  await sendFormSelenium(driver, screenshotPrefix, formInput, expectedContents);
+  sendFormChai(app, url, formInput, expectedContents, chaiResDebug);
+};
+
+export {
+  getFirefoxDriver,
+  takeScreenshot,
+  sendFormSelenium,
+  sendFormChai,
+  sendForm,
+};

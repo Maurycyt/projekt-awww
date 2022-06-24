@@ -2,11 +2,12 @@ const emailRegex =
   // eslint-disable-next-line no-useless-escape
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-const phoneRegex = /^(\s*\d)*\s*$/g;
+const phoneRegex = /^(\s*\+){0,1}(\s*\d)*\s*$/g;
 
 const checkEmail = (input) => String(input).match(emailRegex) != null;
 
-const checkPhone = (input) => String(input).match(phoneRegex) != null;
+const checkPhone = (input) =>
+  input == null || String(input).match(phoneRegex) != null;
 
 const validateFirstName = () => {
   if (!document.getElementById("first_name").value) {
@@ -31,7 +32,7 @@ const validateLastName = () => {
 const validatePhone = () => {
   if (!checkPhone(document.getElementById("phone").value)) {
     document.getElementById("phone_error").innerHTML =
-      "Proszę wpisać poprawny numer telefonu lub pozostawić pole puste.";
+      "Proszę podać poprawny numer telefonu lub pozostawić pole puste.";
     return false;
   }
   document.getElementById("phone_error").innerHTML = "";
@@ -41,7 +42,7 @@ const validatePhone = () => {
 const validateEmail = () => {
   if (!checkEmail(document.getElementById("email").value)) {
     document.getElementById("email_error").innerHTML =
-      "Proszę wpisać poprawny e-mail.";
+      "Proszę podać poprawny e-mail.";
     return false;
   }
   document.getElementById("email_error").innerHTML = "";
@@ -71,9 +72,9 @@ const validateConfirmPassword = () => {
 
 const validateNPeople = () => {
   const nPeople = parseInt(document.getElementById("n_people").value, 10);
-  if (!nPeople || nPeople < 0) {
+  if (!nPeople || nPeople <= 0) {
     document.getElementById("n_people_error").innerHTML =
-      "Liczba zgłoszeń musi być większa od 0.";
+      "Liczba osób musi być większa niż 0.";
     return false;
   }
   document.getElementById("n_people_error").innerHTML = "";
@@ -92,6 +93,7 @@ const validateGDPR = () => {
 
 export {
   checkEmail,
+  checkPhone,
   validateFirstName,
   validateLastName,
   validatePhone,

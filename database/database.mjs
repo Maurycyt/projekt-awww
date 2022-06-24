@@ -51,7 +51,7 @@ export const getDBMemory = async () => {
 
 export const getDBPostgres = async () => {
   const sequelize = new Sequelize(
-    "postgres://mw429680:mw429680@localhost:5432/bd"
+    "postgres://mw429680:mw429680@localhost:54321/bd"
   );
   return getDB(sequelize);
 };

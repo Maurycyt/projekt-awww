@@ -4,7 +4,7 @@ import { ValidationError } from "sequelize";
 import bcrypt from "bcrypt";
 import session from "express-session";
 import { check, validationResult } from "express-validator";
-import { checkEmail } from "./public/scripts/validations.mjs";
+import { checkEmail, checkPhone } from "./public/scripts/validations.mjs";
 import { getDBFromEnvironmentVariable } from "./database/database.mjs";
 import { getAllWycieczki, getWycieczka } from "./database/queries.mjs";
 import initFunc from "./database/initDB.mjs";
@@ -87,12 +87,22 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
         }
         return true;
       })
-      .withMessage("Proszę wpisać poprawny email."),
-    check("first_name").notEmpty().withMessage("Imię nie może być puste."),
-    check("last_name").notEmpty().withMessage("Nazwisko nie może być puste."),
+      .withMessage("Proszę podać poprawny e-mail."),
+    check("phone")
+      .custom((value) => {
+        if (!checkPhone(value)) {
+          throw new Error("Phone invalid.");
+        }
+        return true;
+      })
+      .withMessage(
+        "Proszę podać poprawny numer telefonu lub pozostawić pole puste."
+      ),
+    check("first_name").notEmpty().withMessage("Proszę podać imię."),
+    check("last_name").notEmpty().withMessage("Proszę podać nazwisko."),
     check("n_people")
-      .isInt({ min: 0 })
-      .withMessage("Liczba zgłoszeń musi być większa od 0."),
+      .isInt({ min: 1 })
+      .withMessage("Liczba osób musi być większa niż 0."),
     check("gdpr_permission")
       .equals("on")
       .withMessage("Nie udzielono zgody RODO."),
@@ -109,7 +119,7 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
         return withRollback(t, () =>
           res.render("book", {
             trip,
-            error_info: "Brak wystarczającej liczby wolnych miejsc!",
+            db_error: "Brak wystarczającej liczby wolnych miejsc!",
           })
         );
       }

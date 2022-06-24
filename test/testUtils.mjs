@@ -63,7 +63,7 @@ const sendFormSelenium = async (
   );
 
   for (const value of expectedContents) {
-    await driver.wait(until.elementLocated(By.xpath(`//p[text()='${value}']`)));
+    await driver.wait(until.elementLocated(By.xpath(`//*[text()='${value}']`)));
   }
 };
 

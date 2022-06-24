@@ -168,11 +168,8 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
 
   app.post(
     "/register",
-    check("first_name").not().isEmpty().withMessage("Imię nie może być puste."),
-    check("last_name")
-      .not()
-      .isEmpty()
-      .withMessage("Nazwisko nie może być puste."),
+    check("first_name").not().isEmpty().withMessage("Proszę podać imię."),
+    check("last_name").not().isEmpty().withMessage("Proszę podać nazwisko."),
     check("email")
       .custom((value) => {
         if (!checkEmail(value)) {
@@ -180,7 +177,7 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
         }
         return true;
       })
-      .withMessage("Proszę wpisać poprawny email."),
+      .withMessage("Proszę podać poprawny e-mail."),
     check("password").not().isEmpty().withMessage("Proszę podać hasło."),
     check("confirm_password")
       .not()
@@ -188,7 +185,6 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
       .withMessage("Powtórzone hasło musi być równe hasłu."),
     (req, res) => {
       const validationErrors = validationResult(req);
-      console.log("Errors so far:", validationErrors);
       if (req.body.password !== req.body.confirm_password) {
         validationErrors.errors.push({
           value: req.body.confirm_password,
@@ -196,7 +192,6 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
           param: "confirm_password",
           location: "body",
         });
-        console.log("Here!", validationErrors);
       }
       if (!validationErrors.isEmpty()) {
         res.render("register", { ...parseErrors(validationErrors.mapped()) });

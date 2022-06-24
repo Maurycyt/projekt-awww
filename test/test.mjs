@@ -5,6 +5,7 @@ import bookingValidationTest from "./bookingValidationTest.mjs";
 import registrationValidationTest from "./registrationValidationTest.mjs";
 import loginValidationTest from "./loginValidationTest.mjs";
 import sessionTest from "./sessionTest.mjs";
+import layoutTest from "./layoutTest.mjs";
 import { database } from "../index.mjs";
 
 testTest();
@@ -14,3 +15,4 @@ bookingValidationTest(database);
 registrationValidationTest(database);
 loginValidationTest(database);
 sessionTest(database);
+layoutTest(database);

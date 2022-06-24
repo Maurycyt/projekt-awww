@@ -11,7 +11,7 @@ import initFunc from "../database/initDB.mjs";
 /* global describe, before, it, after */
 
 const describeSessionTest = (database) =>
-  describe("Tests if login forms are properly validated in the frontend and backend.", () => {
+  describe("Tests if a simple scenario requiring sessions works as expected.", () => {
     let driver;
 
     before(async () => {

@@ -29,7 +29,7 @@ app.use(
   })
 );
 
-const database = await getDBFromEnvironmentVariable().then((db) => {
+const databasePromise = getDBFromEnvironmentVariable().then((db) => {
   initFunc(db);
 
   app.get("/", async (req, res) => {
@@ -307,4 +307,4 @@ const database = await getDBFromEnvironmentVariable().then((db) => {
   return db;
 });
 
-export { app, port, database };
+export { app, port, databasePromise };

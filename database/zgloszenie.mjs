@@ -1,6 +1,4 @@
 export default (conn, Sequelize, DataTypes) => {
-  // odkomentuj i uzupełnij argumenty metody sequelize.define
-
   const Zgloszenie = conn.define("Zgloszenie", {
     id: {
       type: DataTypes.INTEGER,

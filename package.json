@@ -10,7 +10,7 @@
   "scripts": {
     "test": "rm -rf ./testScreenshots/ && export TESTING_WYCIECZKI=true && export WYCIECZKI_PORT=3001 && node ./node_modules/mocha/bin/mocha --exit --timeout 10000",
     "lint": "npx eslint **/*.mjs",
-    "start": "export TESTING_WYCIECZKI= && export WYCIECZKI_PORT=3000 && nodemon ./index.mjs",
+    "start": "export TESTING_WYCIECZKI= && WYCIECZKI_PORT=3000 nodemon ./index.mjs",
     "initDB": "node ./database/initDBSqlite.mjs"
   },
   "author": "",

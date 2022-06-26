@@ -1,4 +1,6 @@
 export default (conn, Sequelize, DataTypes) => {
+  // odkomentuj i uzupełnij argumenty metody sequelize.define
+
   const Wycieczka = conn.define(
     "Wycieczka",
     {

@@ -9,7 +9,7 @@ import _uzytkownik from "./uzytkownik.mjs";
 
 export const getDB = async (sequelize) => {
   try {
-    // Sprawdzenie poprawności połączenia
+    // Sprawdzenie poprawności połączenia ]
     await sequelize.authenticate();
     console.log(
       "Connection to the database has been established successfully."

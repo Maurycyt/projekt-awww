@@ -6,9 +6,7 @@ import registrationValidationTest from "./registrationValidationTest.mjs";
 import loginValidationTest from "./loginValidationTest.mjs";
 import sessionTest from "./sessionTest.mjs";
 import layoutTest from "./layoutTest.mjs";
-import { databasePromise } from "../index.mjs";
-
-const database = await databasePromise;
+import { database } from "../index.mjs";
 
 testTest();
 databaseTest();

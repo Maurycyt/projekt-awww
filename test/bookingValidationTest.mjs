@@ -4,8 +4,7 @@ import initFunc from "../database/initDB.mjs";
 
 /* global describe, before, it, after */
 
-const describeBookingValidationTest = async (databasePromise) => {
-  const database = await databasePromise;
+const describeBookingValidationTest = (database) =>
   describe("Tests if booking forms are properly validated in the frontend and backend.", () => {
     let driver;
 
@@ -285,6 +284,5 @@ const describeBookingValidationTest = async (databasePromise) => {
 
     after(() => driver.quit());
   });
-};
 
 export default describeBookingValidationTest;

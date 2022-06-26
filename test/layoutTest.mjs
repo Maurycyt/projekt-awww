@@ -7,7 +7,8 @@ import initFunc from "../database/initDB.mjs";
 
 /* global describe, before, it */
 
-const describeLayoutTest = (database) =>
+const describeLayoutTest = async (databasePromsie) => {
+  const database = await databasePromsie;
   describe("Tests if the layout of the main page changes appropriately with screen sizes.", () => {
     let driver;
 
@@ -45,5 +46,6 @@ const describeLayoutTest = (database) =>
       driver.quit();
     });
   });
+};
 
 export default describeLayoutTest;

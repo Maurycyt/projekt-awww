@@ -11,7 +11,8 @@ import initFunc from "../database/initDB.mjs";
 
 /* global describe, before, it, after */
 
-const describeLoginValidationTest = (database) =>
+const describeLoginValidationTest = async (databasePromise) => {
+  const database = await databasePromise;
   describe("Tests if login forms are properly validated in the frontend and backend.", () => {
     let driver;
     chai.use(chaiHttp);
@@ -152,5 +153,6 @@ const describeLoginValidationTest = (database) =>
 
     after(() => driver.quit());
   });
+};
 
 export default describeLoginValidationTest;

@@ -8,13 +8,11 @@ import sessionTest from "./sessionTest.mjs";
 import layoutTest from "./layoutTest.mjs";
 import { databasePromise } from "../index.mjs";
 
-const database = await databasePromise;
-
 testTest();
 databaseTest();
 notFoundTest();
-bookingValidationTest(database);
-registrationValidationTest(database);
-loginValidationTest(database);
-sessionTest(database);
-layoutTest(database);
+bookingValidationTest(databasePromise);
+registrationValidationTest(databasePromise);
+loginValidationTest(databasePromise);
+sessionTest(databasePromise);
+layoutTest(databasePromise);

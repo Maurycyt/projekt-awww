@@ -9,7 +9,8 @@ import initFunc from "../database/initDB.mjs";
 
 /* global describe, before, it, after */
 
-const describeRegistrationValidationTest = (database) =>
+const describeRegistrationValidationTest = async (databasePromise) => {
+  const database = await databasePromise;
   describe("Tests if registration forms are properly validated in the frontend and backend.", () => {
     let driver;
 
@@ -223,5 +224,6 @@ const describeRegistrationValidationTest = (database) =>
 
     after(() => driver.quit());
   });
+};
 
 export default describeRegistrationValidationTest;

@@ -10,7 +10,8 @@ import initFunc from "../database/initDB.mjs";
 
 /* global describe, before, it, after */
 
-const describeSessionTest = (database) =>
+const describeSessionTest = async (databasePromise) => {
+  const database = await databasePromise;
   describe("Tests if a simple scenario requiring sessions works as expected.", () => {
     let driver;
 
@@ -135,5 +136,6 @@ const describeSessionTest = (database) =>
 
     after(() => driver.quit());
   });
+};
 
 export default describeSessionTest;
